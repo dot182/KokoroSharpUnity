@@ -15,9 +15,9 @@ namespace KokoroSharp
     public partial class KokoroTTS
     {
         static IReadOnlyDictionary<KModel, string> ModelNamesMap { get; } = new Dictionary<KModel, string>() {
-        { float32, Path.Combine(Application.streamingAssetsPath, "Kokoro/kokoro.onnx") },
-        { float16, Path.Combine(Application.streamingAssetsPath, "Kokoro/kokoro-quant.onnx") },
-        { int8,    Path.Combine(Application.streamingAssetsPath, "Kokoro/kokoro-quant-convinteger.onnx") },
+        { float32, Path.Combine(Application.persistentDataPath, "Kokoro/kokoro.onnx") },
+        { float16, Path.Combine(Application.persistentDataPath, "Kokoro/kokoro-quant.onnx") },
+        { int8,    Path.Combine(Application.persistentDataPath, "Kokoro/kokoro-quant-convinteger.onnx") },
     };
         static string URL(KModel quant) => $"https://github.com/taylorchu/kokoro-onnx/releases/download/v0.2.0/{ModelNamesMap[quant]}";
 

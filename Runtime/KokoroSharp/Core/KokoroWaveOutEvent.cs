@@ -1,7 +1,5 @@
-﻿
-using NAudio.Wave;
+﻿using NAudio.Wave;
 using System;
-using UnityEngine;
 
 namespace KokoroSharp.Core
 {
@@ -10,6 +8,8 @@ namespace KokoroSharp.Core
     public abstract class KokoroWaveOutEvent
     {
         public RawSourceWaveStream stream { get; private set; }
+
+        public float Volume { get; protected set; } = 1;
 
         /// <summary> The state of the playback (Playing/Stopped). </summary>
         public abstract PlaybackState PlaybackState { get; }
@@ -36,5 +36,4 @@ namespace KokoroSharp.Core
         /// <summary> Pause not supported for simplicity. </summary>
         public void Pause() => throw new NotImplementedException("We're not gonna support this.");
     }
-
 }

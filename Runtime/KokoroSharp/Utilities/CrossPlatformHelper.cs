@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using KokoroSharpUnity;
+using UnityEngine;
 
 namespace KokoroSharp.Utilities
 {
@@ -33,13 +34,6 @@ espeak_cli_path += "macos-";
             espeak_cli_path += (RuntimeInformation.ProcessArchitecture == Architecture.Arm64 ? "arm64.dll" : "amd64.dll");
 
             return File.Exists(espeak_cli_path) ? espeak_cli_path : "espeak-ng"; // In case developers did not include the espeak folder at all.
-        }
-
-        /// <summary> Retrieves the appropriate audio player for the running system: <b>NAudio.WaveOutEvent wrapper</b> for Windows, or <b>AL wrapper</b> for other OS. </summary>
-        public static KokoroWaveOutEvent GetAudioPlayer()
-        {
-            
-            return new KokoroWaveOutEventUnity(); // Just use Unity audio sources
         }
     }
 }

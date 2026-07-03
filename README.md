@@ -1,6 +1,5 @@
 This is an adapted version of KokoroSharp that updates the C# 9+ syntax and uses a KokoroWaveOutEvent for Unity audio sources to make it usable in Unity.
 This package includes the eSpeak NG dlls from `https://github.com/Lyrcaxis/KokoroSharpBinaries`, where you can also get the voices by running the [download script](https://github.com/Lyrcaxis/KokoroSharpBinaries/blob/main/convert_kokoro_voices.py).
-The voices are expected to be in Assets/StreamingAssets/Kokoro/voices.
 
 You can install this package by:
 1. Opening your Unity project
@@ -12,26 +11,29 @@ You can install this package by:
 
 ## Dependencies
 This package requires the package [com.github.asus4.onnxruntime](https://github.com/asus4/onnxruntime-unity/tree/main)
-Be sure to follow the installation instructions from their readme.
 
-## Usage
-- Add voices as mentioned above
-- Add the KokoroUnity component to a GameObject, and drag in your audio source.
+## Setup
+- Download voices from https://github.com/Lyrcaxis/KokoroSharpBinaries/blob/main/convert_kokoro_voices.py
+- Add KokoroTTSUnity and MainThreadDispatcher components 
+- Set AudioSource and MainThreadDispatcher on the KokoroAudioPlayer on the KokoroTTSUnity component
+- Set the model and voice path in the inspector
 
-Example code:
+You can run it like this:
 ```csharp
-using KokoroSharp;
-using KokoroSharp.Core;
+using KokoroTTSUnity;
 
-void Start()
+public class SampleTTS : MonoBehaviour
 {
-    KokoroTTS kokoroTTS = KokoroTTS.LoadModel();
-    KokoroVoice voice = KokoroVoiceManager.GetVoice("af_heart");
-    kokoroTTS.SpeakFast("Hello World!", voice);
+    public KokoroTTSUnity TTS;
+    void Start()
+    {
+        KokoroVoice voice = KokoroVoiceManager.GetVoice("af_heart");
+        TTS.SpeakFast("Hello world", voice);
+        // or 
+        TTS.Speak("Hello world", voice);
+    }
 }
 ```
-
-Tested on Unity 6, Windows 11 on CPU 
 
 ## License
 - This package is provided under the [MIT LICENSE](LICENSE).

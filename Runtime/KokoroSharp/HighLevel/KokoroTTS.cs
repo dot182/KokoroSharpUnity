@@ -37,7 +37,7 @@ namespace KokoroSharp
             set => playbackInstance.NicifySamples = value;
         }
 
-        KokoroPlayback playbackInstance = new();
+        KokoroPlayback playbackInstance;
         SynthesisHandle currentHandle = new();
         KokoroTTSPipelineConfig defaultPipelineConfig = new();
 
@@ -46,8 +46,18 @@ namespace KokoroSharp
         /// <para> If 'options' is specified, the model will be loaded with them. This is particularly useful when needing to run on non-CPU backends, as the default backend otherwise is the CPU with 8 threads. </para>
         /// <para> The model(s) can be found at https://github.com/taylorchu/kokoro-onnx/releases/tag/v0.2.0. </para>
         /// </summary>
-        public KokoroTTS(string modelPath, SessionOptions options = null) : base(modelPath, options) { }
+        /// <remarks> For Unity Integeration: Added KokoroWaveOutEvent as an argument that can be passed by a MonoBehaviour. </remarks>
+        public KokoroTTS(string modelPath, KokoroWaveOutEvent waveOut, SessionOptions options = null) : base(modelPath, options)
+            => SetWaveOutEvent(waveOut);
 
+        /// <summary> Base Kokoro TTS Engine constructor. </summary>
+        /// <remarks> For Unity Integeration: You will need to set the wave out event manually. </remarks>
+        public KokoroTTS(string modelPath, SessionOptions options = null) : base(modelPath, options) {}
+
+        /// <summary> Creates a new Playback Instance with the WaveOutEvent </summary>
+        public void SetWaveOutEvent(KokoroWaveOutEvent waveOut)
+            => playbackInstance = new(waveOut);
+        
         /// <summary> Speaks the text with the specified voice, without segmenting it (max 510 tokens), resulting in a slower, yet potentially higher quality response. </summary>
         /// <remarks> This is the simplest, highest-level interface of the library. For more fine-grained controls, see <see cref="KokoroEngine"/>. </remarks>
         /// <param name="text"> The text to speak. </param>
@@ -120,7 +130,6 @@ namespace KokoroSharp
                 playbackHandle.OnCanceled += (_) => pauseHandle.Abort(); // Last but not least, register the cancel/abort callbacks for the pause, so the playback buffer won't bloat.
                 playbackHandle.OnAborted += () => pauseHandle.Abort();   // The users don't need to be bothered with having access to these, but it's important for us to handle them.
             }
-
 
             // Callbacks
             void OnStartedCallback()

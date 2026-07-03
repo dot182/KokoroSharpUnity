@@ -14,7 +14,7 @@ namespace KokoroSharp
     public sealed class KokoroPlayback : IDisposable
     {
         public static readonly WaveFormat waveFormat = new(24000, 16, 1);
-        readonly KokoroWaveOutEvent waveOut = CrossPlatformHelper.GetAudioPlayer();
+        readonly KokoroWaveOutEvent waveOut; 
         readonly ConcurrentQueue<PlaybackHandle> queuedPackets = new();
 
         volatile bool hasExited;
@@ -25,8 +25,9 @@ namespace KokoroSharp
 
         /// <summary> Creates a background audio playback instance, and causes it to automatically play back all samples added via <see cref="Enqueue(float[])"/>. </summary>
         /// <remarks> If 'job' is specified, the instance will automatically cease when the job is completed or canceled. </remarks>
-        public KokoroPlayback()
+        public KokoroPlayback(KokoroWaveOutEvent waveOut)
         {
+            this.waveOut = waveOut;
             new Thread(async () =>
             {
                 while (!hasExited)

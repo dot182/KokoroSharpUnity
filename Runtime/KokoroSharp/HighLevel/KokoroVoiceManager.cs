@@ -1,16 +1,12 @@
-﻿
-
-using NumSharp;
+﻿using NumSharp;
+using KokoroSharp.Core;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using KokoroSharp.Core;
-using System;
-using UnityEngine;
 
 namespace KokoroSharp
 {
-
     /// <summary> Helper module responsible for holding Kokoro Voices and making them accessible for retrieval by name. </summary>
     /// <remarks> Also contains methods that allows mixing voices with each other to create new voices with shared characteristics. </remarks>
     public static class KokoroVoiceManager
@@ -20,11 +16,8 @@ namespace KokoroSharp
 
         /// <summary> Gathers and loads all voices on the specified path. ("voices" is the default path the NuGet Package bundles the voices at). </summary>
         /// <remarks> This exists in case developers want to ship their project with custom paths or use custom voice loading logic. </remarks>
-        public static void LoadVoicesFromPath(string voicesPath = "Kokoro/voices")
+        public static void LoadVoicesFromPath(string voicesPath)
         {
-            if (voicesPath == "Kokoro/voices")
-                voicesPath = Path.Combine(Application.streamingAssetsPath, voicesPath);
-
             if (!Directory.Exists(voicesPath)) { throw new DirectoryNotFoundException(); }
             var voiceFilePaths = Directory.GetFiles(voicesPath);
 
@@ -41,18 +34,17 @@ namespace KokoroSharp
         /// <remarks> Custom mixed voices will not be considered unless named and added to <see cref="Voices"/>. </remarks>
         public static KokoroVoice GetVoice(string name)
         {
-            if (Voices.Count == 0) { LoadVoicesFromPath(); }
             return Voices.First(x => x.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase));
         }
 
         /// <summary> Allows retrieving voices that can speak fluently in the specified language. </summary>
         /// <remarks> If 'gender' is specified, voices of different genders than the one specified will be ignored. </remarks>
         public static List<KokoroVoice> GetVoices(KokoroLanguage language, KokoroGender gender = KokoroGender.Both) => GetVoices(new KokoroLanguage[] { language }, gender);
+
         /// <summary> Allows retrieving voices that can speak fluently in the specified languages. </summary>
         /// <remarks> If 'gender' is specified, voices of different genders than the one specified will be ignored. </remarks>
         public static List<KokoroVoice> GetVoices(IEnumerable<KokoroLanguage> languages, KokoroGender gender = KokoroGender.Both)
         {
-            if (Voices.Count == 0) { LoadVoicesFromPath(); }
             var selectedVoices = Voices.FindAll(x => languages.Contains(x.GetLanguage()));
             if (gender != KokoroGender.Both) { selectedVoices.RemoveAll(x => x.Name[1] != (char)gender); }
             return selectedVoices;
@@ -83,6 +75,6 @@ namespace KokoroSharp
 
         /// <summary> Mixes the two voices with formula <b>NewVoice = (λa * A) + (λb * B)</b>, where <b>λ</b> are the normalized weights. </summary>
         /// <remarks> For more fine-grained control and mixing multiple voices in one go, see <b>KokoroVoiceManager.Mix(..)</b>. </remarks>
-        public static KokoroVoice MixWith(this KokoroVoice A, KokoroVoice B, float wA = 0.5f, float wB = 0.5f) => Mix(new (KokoroVoice, float)[] { (A, wA), (B, wB) });
+        public static KokoroVoice MixWith(this KokoroVoice A, KokoroVoice B, float wA = 0.5f, float wB = 0.5f) => Mix(new (KokoroVoice voice, float weight)[] { (A, wA), (B, wB) });
     }
 }

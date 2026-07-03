@@ -1,25 +1,19 @@
 {
-  "name": "com.unipotent.kokorosharpunity",
+  "name": "com.dot182.kokorosharpunity",
   "version": "0.1.0",
   "displayName": "Kokoro Sharp for Unity",
-  "description": "Unity package for the Kokoro Sharp library",
-  "unity": "2022.3",
-  "keywords": [
-    "tts",
-    "speech",
-    "audio",
-    "voice"
-  ],
-    "license": "MIT",
+  "description": "Unity package for Kokoro TTS",
+  "license": "MIT",
   "author": {
-    "name": "UniPotent",
-    "url": "https://github.com/unipotent"
+    "name": "dot182",
+    "url": "https://github.com/dot182"
   },
   "dependencies": {
-    "com.github.asus4.onnxruntime":"0.4.0"
+    "com.github.asus4.onnxruntime": "0.4.0"
   },
-    "repository": {
+  "repository": {
     "type": "git",
-    "url": "https://github.com/unipotent/KokoroSharpUnity.git"
-  }
+    "url": "https://github.com/dot182/KokoroSharpUnity.git"
+  },
+  "unity": "2022.3"
 }
